@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "logging-handler"
+requires-python = ">=3.8"
+version = "0.0.1"
+
+authors = [
+    { name = "Marius Herrmann", email = "marius.herrmann@ecdb.com" },
+]
+
+maintainers = [
+    { name = "Marius Herrmann", email = "marius.herrmann@ecdb.com" },
+]
+
+description = "Subclass of logging.handlers.HTTPHandler, that emits logs as JSON, instead of form-data."
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["dependencies", "optional-dependencies", "readme"]
+
+license = { text = "" }
+
+[project.urls]
+Repository = "https://github.com/ecommercedb/logging-handler.git"
+
+[tool.setuptools.dynamic]
+readme = { file = ["README.md"] }
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies.dev = { file = ["requirements_dev.txt"] }
+
+[tool.licensecheck]
+using = "requirements:requirements.txt"
+format = "markdown"
+file = "LICENSE_POOL.md"
+
+[tool.pip-tools]
+generate-hashes = false
+no-annotate = true
+annotation-style = "line"
+resolver = "backtracking"
+
+[tool.black]
+line-length = 160
+extend-exclude = '''
+/(
+  | .env
+  | .venv
+  | .idea
+  | .ruff_cache
+  | docker
+  | venv
+)/
+'''
+
+[tool.ruff]
+extend-select = ['Q', 'C90', "F", "E", "W", "I001", "C", "B"]
+ignore = [
+    "E501", # line too long, handled by black
+    "B008", # do not perform function calls in argument defaults (fastapi)
+    "C901", # too complex (long functions)
+    #    "I001",  # disable import sorting
+]
+target-version = "py312"
+
+#per-file-ignores = { "__init__.py" = ["E402", "F401"] }
+#flake8-quotes = { inline-quotes = 'single', multiline-quotes = 'double' }
+mccabe = { max-complexity = 14 }
+pydocstyle = { convention = 'google' }

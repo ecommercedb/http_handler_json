@@ -1,0 +1,39 @@
+name: pre-commit
+
+on: [ push, workflow_dispatch, pull_request ]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    # clone backend & setup python
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+      with:
+        cache: 'pip'
+
+    - run: python -m pip install -U pip wheel setuptools && python -m pip install -U pre-commit
+    - run: python -m pip freeze --local
+
+     # this will adjust the revs inside pre-commit-config.yaml to the latest available versionss
+    - run: pre-commit autoupdate
+    # required, as pre-commit run will exit 1 in case updates were applied (and asks to stage them)
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "build(gh-pre-commit): [GH-BOT] Update pre-commit hooks"
+
+    - uses: actions/cache@v3
+      with:
+        path: ~/.cache/pre-commit
+        key: pre-commit-3|${{ env.pythonLocation }}|${{ hashFiles('.pre-commit-config.yaml') }}
+
+    # hack to workaround the default, that applications do return 1 in case they have modified file
+    # (we need 0 to proceed and only want 1 in case of unfixables)
+    - run: pre-commit run --show-diff-on-failure --color=always --all-files || pre-commit run --show-diff-on-failure --color=always --all-files
+
+    # commit and push in case any files were modified
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "refactor(global): [GH-BOT] Automatic changes by pre-commit"

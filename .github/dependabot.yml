@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Europe/Berlin"
+    target-branch: "main"
+#    ignore:
+#      - dependency-name: "packagename"
+    open-pull-requests-limit: 0
