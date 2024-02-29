@@ -1,11 +1,38 @@
 import http.client
 import logging.handlers
+import socket
+from datetime import datetime
 
 import orjson
+
+HOSTNAME = socket.gethostname()
 
 
 class JsonHttpHandler(logging.handlers.HTTPHandler):
     """Formatter to dump error message into JSON"""
+
+    def mapLogRecord(self, record):
+        """
+        Default implementation of mapping the log record into a dict
+        that is sent as the CGI data. Overwrite in your class.
+        Contributed by Franz Glasner.
+        """
+        record_dict = record.__dict__
+        log_record = {
+            "levelname": record_dict.get("levelname"),
+            "name": record_dict.get("name"),
+            "msg": record_dict.get("msg"),
+            "module": record_dict.get("module"),
+            "hostname": HOSTNAME,
+        }
+
+        try:
+            created = datetime.fromtimestamp(record_dict.get("created")).isoformat()
+            log_record["created"] = created
+        except Exception:
+            pass
+
+        return log_record
 
     def getConnection(self, host, secure):
         """
@@ -33,6 +60,7 @@ class JsonHttpHandler(logging.handlers.HTTPHandler):
             h: http.client.HTTPConnection | http.client.HTTPSConnection = self.getConnection(host, self.secure)
             url = self.url
             data = orjson.dumps(self.mapLogRecord(record))
+
             if self.method == "GET":
                 if url.find("?") >= 0:
                     sep = "&"
