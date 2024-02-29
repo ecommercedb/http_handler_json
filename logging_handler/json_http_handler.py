@@ -7,6 +7,21 @@ import orjson
 class JsonHttpHandler(logging.handlers.HTTPHandler):
     """Formatter to dump error message into JSON"""
 
+    def getConnection(self, host, secure):
+        """
+        get a HTTP[S]Connection.
+
+        Override when a custom connection is required, for example if
+        there is a proxy.
+        """
+        import http.client
+
+        if secure:
+            connection = http.client.HTTPSConnection(host, context=self.context, timeout=10)
+        else:
+            connection = http.client.HTTPConnection(host, timeout=10)
+        return connection
+
     def emit(self, record):
         """
         Emit a record.
