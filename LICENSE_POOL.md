@@ -1,7 +1,7 @@
 ## Info
 
 - **program**: licensecheck
-- **version**: 2024
+- **version**: 2024.1.4
 - **license**: MIT LICENSE
 
 ## Project License
@@ -16,11 +16,11 @@ Find a list of packages below
 |:--|:--|
 |✔|orjson|
 
-### orjson-3.9.15
+### orjson-3.10.0
 
 - HomePage: https://github.com/ijl/orjson
 - Author: ijl <ijl@mailbox.org>
 - License: APACHE SOFTWARE LICENSE;; MIT LICENSE
 - Compatible: True
-- Size: 4854933
+- Size: 4912978
 
