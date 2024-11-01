@@ -16,11 +16,11 @@ Find a list of packages below
 |:--|:--|
 |✔|orjson|
 
-### orjson-3.10.7
+### orjson-3.10.10
 
 - HomePage: https://github.com/ijl/orjson
 - Author: ijl <ijl@mailbox.org>
 - License: APACHE SOFTWARE LICENSE;; MIT LICENSE
 - Compatible: True
-- Size: 5056450
+- Size: 5404170
 
